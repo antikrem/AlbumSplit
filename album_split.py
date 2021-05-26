@@ -1,6 +1,6 @@
-from file import File
-from album import Album
-from slicing_executer import SlicingExecuter
+from model.file import File
+from model.album import Album
+from model.slicing_executer import SlicingExecuter
 
 album = Album("Rings of Saturn", "GIDIM")
 file = File("RINGS OF SATURN - GIDIM OFFICIAL FULL LENGTH ALBUM STREAM 2019.mp3", "mp3")
