@@ -12,15 +12,20 @@ TermintedSlicers = list[TermintedSlicer]
 
 class SlicingExecuter :
 
-    def slice(self, file: File, album: Album, slicers: Slicers) :
-        segment = AudioSegment.from_file(file.location, file.format)
+    def __init__(self, file: File, album: Album) :
+        self._file = file
+        self._album = album
 
-        terminated_slicers = self._create_terminated_slicer(slicers, len(segment))
+        self._segment = AudioSegment.from_file(file.location, file.format)
+
+    def slice(self, slicers: Slicers) :
+        terminated_slicers = self._create_terminated_slicer(slicers)
 
         for terminated_slicer in terminated_slicers :
-            SlicingExecuter._export(segment, terminated_slicer, album)
+            self._export(terminated_slicer)
 
-    def _create_terminated_slicer(self, slicers: Slicers, file_end: int) -> TermintedSlicers :
+    def _create_terminated_slicer(self, slicers: Slicers) -> TermintedSlicers :
+        file_end = len(self._segment)
         termintedSlicers = []
         
         for i in range(0, len(slicers)) :
@@ -33,12 +38,10 @@ class SlicingExecuter :
 
         return termintedSlicers
 
-    @staticmethod
-    def _export(segment: AudioSegment, terminated_slicer: TermintedSlicer, album: Album) -> None:
+    def _export(self, terminated_slicer: TermintedSlicer) -> None:
         (start, end, name) = terminated_slicer
         format = "mp3"
-        segment[start:end].export(f'{name}.{format}', format=format, tags=SlicingExecuter._create_tag_structure(album))
+        self._segment[start:end].export(f'{name}.{format}', format=format, tags=self._create_tag_structure())
 
-    @staticmethod
-    def _create_tag_structure(album: Album) :
-        return {'artist' : album._band, 'album' : album._name}
+    def _create_tag_structure(self) :
+        return {'artist' : self._album._band, 'album' : self._album._name}
