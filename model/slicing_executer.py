@@ -1,9 +1,9 @@
 from os import terminal_size
 from pydub import AudioSegment
 
-from time_point import TimePoint
-from album import Album
-from file import File
+from model.time_point import TimePoint
+from model.album import Album
+from model.file import File
 
 Slicer = (int, str)
 Slicers = list[Slicer]
