@@ -44,7 +44,11 @@ class SlicingExecuter :
         song_segment = self._segment[start.time:end.time]
 
         format = "mp3"
-        song_segment.export(f'{name}.{format}', format=format, tags=self._create_tag_structure())
+        song_segment.export(f'{self._create_export_name(terminated_slicer)}.{format}', format=format, tags=self._create_tag_structure())
+
+    def _create_export_name(self, terminated_slicer: TermintedSlicer) :
+        (_, _, name) = terminated_slicer
+        return f'{self._album._band} - {self._album._name} - {name}'
 
     def _create_tag_structure(self) :
         return {'artist' : self._album._band, 'album' : self._album._name}
