@@ -14,6 +14,7 @@ class TimePoint :
 
     MATCH = {
         int: lambda x: x * 1000,
+        float: lambda x: int(x * 1000),
         str: time_from_string
     }
 
