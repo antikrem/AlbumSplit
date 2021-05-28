@@ -8,7 +8,7 @@ from model.file import File
 Slicer = (int, str)
 Slicers = list[Slicer]
 
-TermintedSlicer = (int, int, str)
+TermintedSlicer = (int, int, int, str)
 TermintedSlicers = list[TermintedSlicer]
 
 class SlicingExecuter :
@@ -32,23 +32,23 @@ class SlicingExecuter :
         for i in range(0, len(slicers)) :
             (start, name) = slicers[i]
             if i == len(slicers) - 1 :
-                termintedSlicers.append((TimePoint(start), TimePoint.from_milliseconds(file_end), name))
+                termintedSlicers.append((i, TimePoint(start), TimePoint.from_milliseconds(file_end), name))
             else :
                 (next_start, _) = slicers[i + 1]
-                termintedSlicers.append((TimePoint(start), TimePoint(next_start), name))
+                termintedSlicers.append((i, TimePoint(start), TimePoint(next_start), name))
 
         return termintedSlicers
 
     def _export(self, terminated_slicer: TermintedSlicer) -> None:
-        (start, end, name) = terminated_slicer
+        (_, start, end, _) = terminated_slicer
         song_segment = self._segment[start.time:end.time]
 
         format = "mp3"
         song_segment.export(f'{self._create_export_name(terminated_slicer)}.{format}', format=format, tags=self._create_tag_structure())
 
     def _create_export_name(self, terminated_slicer: TermintedSlicer) :
-        (_, _, name) = terminated_slicer
-        return f'{self._album._band} - {self._album._name} - {name}'
+        (index, _, _, name) = terminated_slicer
+        return f'{self._album._band} - {self._album._name} - {index + 1} - {name}'
 
     def _create_tag_structure(self) :
         return {'artist' : self._album._band, 'album' : self._album._name}
