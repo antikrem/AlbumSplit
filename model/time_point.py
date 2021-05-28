@@ -1,4 +1,3 @@
-
 class TimePoint :
 
     def __init__(self, param) :

@@ -1,6 +1,7 @@
 from os.path import exists
 
 class File :
+    
     def __init__(self, location: str, format: str) :
 
         if not exists(location) :
