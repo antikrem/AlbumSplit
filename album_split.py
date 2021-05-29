@@ -1,9 +1,10 @@
 from model.file import File
 from model.album import Album
-from model.slicing_executer import SlicingExecuter
+from actors.slicing_executer import SlicingExecuter
 
-album = Album("Rings of Saturn", "GIDIM")
-file = File("RINGS OF SATURN - GIDIM OFFICIAL FULL LENGTH ALBUM STREAM 2019.mp3", "mp3")
-slicers = [(0, "Pustules"), (269, "Divine Authority"), (482, "Hypodermis Glitch")]
+album = Album('', '')
+file = File('', '')
+slicers = [
+    ]
 
 SlicingExecuter(file, album).slice(slicers)
