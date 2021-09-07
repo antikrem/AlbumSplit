@@ -4,6 +4,7 @@ from pydub import AudioSegment
 from model.time_point import TimePoint
 from model.album import Album
 from model.file import File
+from model.publishable_segment import PublishableSegment
 
 Slicer = (int, str)
 Slicers = list[Slicer]
@@ -19,11 +20,9 @@ class SlicingExecuter :
 
         self._segment = AudioSegment.from_file(file.location, file.format)
 
-    def slice(self, slicers: Slicers) :
+    def slice(self, slicers: Slicers) -> list[PublishableSegment]:
         terminated_slicers = self._create_terminated_slicer(slicers)
-
-        for terminated_slicer in terminated_slicers :
-            self._export(terminated_slicer)
+        return map(terminated_slicers, self._export)
 
     def _create_terminated_slicer(self, slicers: Slicers) -> TermintedSlicers :
         file_end = len(self._segment)
@@ -41,14 +40,7 @@ class SlicingExecuter :
 
     def _export(self, terminated_slicer: TermintedSlicer) -> None:
         (_, start, end, _) = terminated_slicer
-        song_segment = self._segment[start.time:end.time]
-
-        format = "mp3"
-        song_segment.export(self._create_export_name(terminated_slicer, format), format=format, tags=self._create_tag_structure())
-
-    def _create_export_name(self, terminated_slicer: TermintedSlicer, format: str) -> str :
-        (index, _, _, name) = terminated_slicer
-        return f'{name}.{format}'
+        return PublishableSegment(self._segment[start.time:end.time], self._create_tag_structure())
 
     def _create_tag_structure(self) :
         return {'artist' : self._album._band, 'album' : self._album._name}
