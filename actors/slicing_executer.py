@@ -48,7 +48,7 @@ class SlicingExecuter :
 
     def _create_export_name(self, terminated_slicer: TermintedSlicer, format: str) -> str :
         (index, _, _, name) = terminated_slicer
-        return f'{self._album._band} - {self._album._name} - {index + 1} - {name}.{format}'
+        return f'{name}.{format}'
 
     def _create_tag_structure(self) :
         return {'artist' : self._album._band, 'album' : self._album._name}
