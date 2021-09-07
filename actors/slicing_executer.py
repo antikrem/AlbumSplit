@@ -22,7 +22,7 @@ class SlicingExecuter :
 
     def slice(self, slicers: Slicers) -> list[PublishableSegment]:
         terminated_slicers = self._create_terminated_slicer(slicers)
-        return map(terminated_slicers, self._export)
+        return map(self._export, terminated_slicers)
 
     def _create_terminated_slicer(self, slicers: Slicers) -> TermintedSlicers :
         file_end = len(self._segment)
