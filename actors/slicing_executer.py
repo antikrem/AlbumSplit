@@ -39,8 +39,8 @@ class SlicingExecuter :
         return termintedSlicers
 
     def _export(self, terminated_slicer: TermintedSlicer) -> None:
-        (_, start, end, _) = terminated_slicer
-        return PublishableSegment(self._segment[start.time:end.time], self._create_tag_structure())
+        (track, start, end, name) = terminated_slicer
+        return PublishableSegment(self._segment[start.time:end.time], name, track, self._create_tag_structure())
 
     def _create_tag_structure(self) :
         return {'artist' : self._album._band, 'album' : self._album._name}
