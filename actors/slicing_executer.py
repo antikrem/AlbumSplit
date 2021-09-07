@@ -4,7 +4,7 @@ from pydub import AudioSegment
 from model.time_point import TimePoint
 from model.album import Album
 from model.file import File
-from model.publishable_segment import PublishableSegment
+from model.exportable_segment import ExportableSegment
 
 Slicer = (int, str)
 Slicers = list[Slicer]
@@ -20,7 +20,7 @@ class SlicingExecuter :
 
         self._segment = AudioSegment.from_file(file.location, file.format)
 
-    def slice(self, slicers: Slicers) -> list[PublishableSegment]:
+    def slice(self, slicers: Slicers) -> list[ExportableSegment]:
         terminated_slicers = self._create_terminated_slicer(slicers)
         return map(self._export, terminated_slicers)
 
@@ -40,7 +40,7 @@ class SlicingExecuter :
 
     def _export(self, terminated_slicer: TermintedSlicer) -> None:
         (track, start, end, name) = terminated_slicer
-        return PublishableSegment(self._segment[start.time:end.time], name, track, self._create_tag_structure())
+        return ExportableSegment(self._segment[start.time:end.time], name, track, self._create_tag_structure())
 
     def _create_tag_structure(self) :
         return {'artist' : self._album._band, 'album' : self._album._name}
