@@ -1,10 +1,15 @@
 from model.file import File
 from model.album import Album
-from actors.slicing_executer import SlicingExecuter
+
+from actors.spliter import Splitter
+
 
 album = Album('', '')
 file = File('', '')
 slicers = [
     ]
 
-SlicingExecuter(file, album).slice(slicers)
+
+splitter = Splitter(file, album)
+splitter.slice(slicers)
+
