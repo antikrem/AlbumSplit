@@ -22,7 +22,7 @@ class SlicingExecuter :
 
     def slice(self, slicers: Slicers) -> list[ExportableSegment]:
         terminated_slicers = self._create_terminated_slicer(slicers)
-        return map(self._export, terminated_slicers)
+        return [self._export(index, slicer) for index, slicer in enumerate(terminated_slicers)]
 
     def _create_terminated_slicer(self, slicers: Slicers) -> TermintedSlicers :
         file_end = len(self._segment)
@@ -38,9 +38,9 @@ class SlicingExecuter :
 
         return termintedSlicers
 
-    def _export(self, terminated_slicer: TermintedSlicer) -> None:
+    def _export(self, trackNumber: int, terminated_slicer: TermintedSlicer) -> None:
         (track, start, end, name) = terminated_slicer
-        return ExportableSegment(self._segment[start.time:end.time], name, track, self._create_tag_structure())
+        return ExportableSegment(self._segment[start.time:end.time], name, track, self._create_tag_structure(trackNumber))
 
-    def _create_tag_structure(self) :
-        return {'artist' : self._album._band, 'album' : self._album._name}
+    def _create_tag_structure(self, trackNumber: int) :
+        return {'artist' : self._album._band, 'album' : self._album._name, 'track' : trackNumber + 1}
