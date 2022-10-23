@@ -19,13 +19,13 @@ class Splitter :
 
         self._segment = AudioSegment.from_file(file.location, file.format)
 
-    def slice(self, slicers: Slicers) -> list[ExportableSegment]:
+    def slice(self, slicers: Slicers, cover: str | None) -> list[ExportableSegment]:
 
         terminated_slicers = self._create_terminated_slicer(slicers)
 
         exportableSegments = [self._createExportableSegment(index, slicer) for index, slicer in enumerate(terminated_slicers)]
 
-        self._publish(exportableSegments)
+        self._publish(exportableSegments, cover)
 
     def _create_terminated_slicer(self, slicers: Slicers) -> TermintedSlicers :
         file_end = len(self._segment)
@@ -41,7 +41,7 @@ class Splitter :
 
         return termintedSlicers
 
-    def _createExportableSegment(self, trackNumber: int, terminated_slicer: TermintedSlicer) -> ExportableSegment :
+    def _createExportableSegment(self, trackNumber: int, terminated_slicer: TermintedSlicer, cover: str | None) -> ExportableSegment :
         (track, start, end, name) = terminated_slicer
         return ExportableSegment(self._segment[start.time:end.time], name, track, self._create_tag_structure(trackNumber))
 
