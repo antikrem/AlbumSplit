@@ -41,12 +41,12 @@ class Splitter :
 
         return termintedSlicers
 
-    def _createExportableSegment(self, trackNumber: int, terminated_slicer: TermintedSlicer, cover: str | None) -> ExportableSegment :
+    def _createExportableSegment(self, trackNumber: int, terminated_slicer: TermintedSlicer) -> ExportableSegment :
         (track, start, end, name) = terminated_slicer
-        return ExportableSegment(self._segment[start.time:end.time], name, track, self._create_tag_structure(trackNumber), cover)
+        return ExportableSegment(self._segment[start.time:end.time], name, track, self._create_tag_structure(trackNumber, name), self._album._cover)
 
-    def _create_tag_structure(self, trackNumber: int) :
-        return {'artist' : self._album._band, 'title' : self, 'album' : self._album._name, 'track' : trackNumber + 1, 'year' : self._album._year}
+    def _create_tag_structure(self, trackNumber: int, name: str) :
+        return {'artist' : self._album._band, 'title' : name, 'album' : self._album._name, 'track' : trackNumber + 1, 'date' : str(self._album._year)}
 
     def _publish(self, exportableSegments: list[ExportableSegment]) :
         for publishedSegment in exportableSegments :
