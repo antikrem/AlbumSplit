@@ -19,13 +19,13 @@ class Splitter :
 
         self._segment = AudioSegment.from_file(file.location, file.format)
 
-    def slice(self, slicers: Slicers, cover: str | None) -> list[ExportableSegment]:
+    def slice(self, slicers: Slicers) -> list[ExportableSegment]:
 
         terminated_slicers = self._create_terminated_slicer(slicers)
 
         exportableSegments = [self._createExportableSegment(index, slicer) for index, slicer in enumerate(terminated_slicers)]
 
-        self._publish(exportableSegments, cover)
+        self._publish(exportableSegments)
 
     def _create_terminated_slicer(self, slicers: Slicers) -> TermintedSlicers :
         file_end = len(self._segment)
@@ -43,11 +43,11 @@ class Splitter :
 
     def _createExportableSegment(self, trackNumber: int, terminated_slicer: TermintedSlicer, cover: str | None) -> ExportableSegment :
         (track, start, end, name) = terminated_slicer
-        return ExportableSegment(self._segment[start.time:end.time], name, track, self._create_tag_structure(trackNumber))
+        return ExportableSegment(self._segment[start.time:end.time], name, track, self._create_tag_structure(trackNumber), cover)
 
     def _create_tag_structure(self, trackNumber: int) :
-        return {'artist' : self._album._band, 'album' : self._album._name, 'track' : trackNumber + 1}
+        return {'artist' : self._album._band, 'title' : self, 'album' : self._album._name, 'track' : trackNumber + 1, 'year' : self._album._year}
 
     def _publish(self, exportableSegments: list[ExportableSegment]) :
         for publishedSegment in exportableSegments :
-            publishedSegment.export(publishedSegment._name + ".mp3", "mp3")
+            publishedSegment.export(publishedSegment._name.lower() + ".mp3", "mp3")
