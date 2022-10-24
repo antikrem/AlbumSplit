@@ -3,13 +3,10 @@ from model.album import Album
 
 from actors.spliter import Splitter
 
+from view.gui import GUI
+import tkinter as tk
 
-album = Album('', '')
-file = File('', '')
-slicers = [
-    ]
+root = tk.Tk()
 
-
-splitter = Splitter(file, album)
-splitter.slice(slicers)
-
+wrappedApplication = GUI(root)
+wrappedApplication.mainloop()
