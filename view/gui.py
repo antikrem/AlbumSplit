@@ -56,9 +56,9 @@ class GUI(tk.Frame) :
         self._cover = None
 
     def _convert(self) :
+        slicers = self._createSlicers(self._slicerText.get("1.0", 'end-1c'))
         album = Album(self._bandTextBox.get(), self._nameTextBox.get(), int(self._yearTextBox.get()), self._cover)
         spliter = Splitter(self._file, album)
-        slicers = self._createSlicers(self._slicerText.get("1.0", 'end-1c'))
         spliter.slice(slicers)
 
     def _createSlicers(self, text) -> str :
